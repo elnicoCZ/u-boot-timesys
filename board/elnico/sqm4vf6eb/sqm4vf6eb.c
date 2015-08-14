@@ -336,12 +336,15 @@ int dram_init(void)
 
 void setup_iomux_uart(void)
 {
-	__raw_writel(0x002011a2, IOMUXC_PAD_026);
-	__raw_writel(0x002011a1, IOMUXC_PAD_027);
-	__raw_writel(0x002011a2, IOMUXC_PAD_028);
-	__raw_writel(0x002011a1, IOMUXC_PAD_029);
-	__raw_writel(0x001011a2, IOMUXC_PAD_032);
-	__raw_writel(0x001011a1, IOMUXC_PAD_033);
+	__raw_writel(0x002011a2, IOMUXC_PAD_026);	// UART1_TX
+	__raw_writel(0x002011a1, IOMUXC_PAD_027);	// UART1_RX
+	__raw_writel(0x001011a2, IOMUXC_PAD_032);	// UART0_TX
+	__raw_writel(0x001011a1, IOMUXC_PAD_033);	// UART0_RX
+	__raw_writel(0x001011a2, IOMUXC_PAD_034);	// UART0_RTS
+	__raw_writel(0x001011a1, IOMUXC_PAD_035);	// UART0_CTS
+	__raw_writel(0x002011a2, IOMUXC_PAD_079);	// UART2_TX
+	__raw_writel(0x002011a1, IOMUXC_PAD_080);	// UART2_RX
+	__raw_writel(0x002011a2, IOMUXC_PAD_081);	// UART2_RTS
 }
 
 #if defined(CONFIG_CMD_NET)
