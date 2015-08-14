@@ -199,11 +199,11 @@
  *
  * The stack sizes are set up in start.S using the settings below
  */
-#define CONFIG_STACKSIZE		(128 * 1024)	/* regular stack */
+#define CONFIG_STACKSIZE		(256 * 1024)	/* regular stack */
 
 /* Physical Memory Map */
 #define CONFIG_NR_DRAM_BANKS		1
-#define PHYS_SDRAM_1_SIZE		(128 * 1024 * 1024)
+#define PHYS_SDRAM_1_SIZE		(256 * 1024 * 1024)
 
 /*#define CONFIG_SYS_SDRAM_BASE		(PHYS_SDRAM_1)*/
 /*#define CONFIG_SYS_SDRAM_BASE		(CONFIG_SYS_INIT_RAM_ADDR)*/
