@@ -1,7 +1,8 @@
 /*
  * Copyright 2012 Freescale Semiconductor, Inc.
+ * Copyright 2015 Elnico s.r.o.
  *
- * Configuration settings for the vybrid Board
+ * Configuration settings for the Elnico SQM4-VF6-EasyBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -22,7 +23,7 @@
 #ifndef __CONFIG_H
 #define __CONFIG_H
 
- /* High Level Configuration Options */
+/* High Level Configuration Options */
 
 #define CONFIG_VYBRID
 
@@ -49,7 +50,7 @@
 
 #define CONFIG_MACH_TYPE		MACH_TYPE_VYBRID_VF6XX
 /* Size of malloc() pool */
-#define CONFIG_SYS_MALLOC_LEN		(CONFIG_ENV_SIZE + 2 * 1024 * 1024)
+#define CONFIG_SYS_MALLOC_LEN		(CONFIG_ENV_SIZE + 4 * 1024 * 1024)
 
 #define CONFIG_BOARD_LATE_INIT
 
@@ -110,6 +111,7 @@
  * NAND FLASH
  */
 #ifdef CONFIG_CMD_NAND
+#define CONFIG_MTD_NAND_FSL_8_BIT	1
 #define CONFIG_JFFS2_NAND
 #define CONFIG_NAND_FSL_NFC
 #define CONFIG_SYS_NAND_BASE		0x400E0000
@@ -119,7 +121,25 @@
 #define	CONFIG_SYS_64BIT_VSPRINTF	/* needed for nand_util.c */
 #endif
 
-#define CONFIG_QUAD_SPI
+/*
+ * Display Support
+ */
+
+/* Framebuffer and LCD */
+//#define CONFIG_LCD
+#define CONFIG_CMD_BMP
+#define CONFIG_LCD_LOGO
+
+#define CONFIG_VIDEO
+#define CONFIG_VIDEO_MVF
+#define CONFIG_CFB_CONSOLE
+#define CONFIG_VGA_AS_SINGLE_DEVICE
+#define CONFIG_SYS_CONSOLE_IS_IN_ENV
+//#define CONFIG_SYS_CONSOLE_OVERWRITE_ROUTINE
+#define CONFIG_VIDEO_BMP_RLE8
+#define CONFIG_SPLASH_SCREEN
+#define CONFIG_SPLASH_SCREEN_ALIGN
+
 
 /* Network configuration */
 #define CONFIG_MCFFEC
@@ -135,23 +155,19 @@
 #	define CONFIG_SYS_FEC0_IOBASE	MACNET0_BASE_ADDR
 #	define CONFIG_SYS_FEC1_IOBASE	MACNET1_BASE_ADDR
 #	define CONFIG_SYS_FEC0_MIIBASE	MACNET0_BASE_ADDR
-#	define CONFIG_SYS_FEC1_MIIBASE	MACNET0_BASE_ADDR
+#	define CONFIG_SYS_FEC1_MIIBASE	MACNET1_BASE_ADDR
 #	define MCFFEC_TOUT_LOOP 1000
 #	undef CONFIG_HAS_ETH1
 
 #	define CONFIG_ETHADDR		00:e0:0c:bc:e5:60
 #	define CONFIG_ETH1ADDR		00:e0:0c:bc:e5:61
 #	define CONFIG_ETHPRIME		"FEC0"
-#	define CONFIG_IPADDR		10.81.67.175
-#	define CONFIG_NETMASK		255.255.252.0
-#	define CONFIG_SERVERIP		10.81.64.153
-#	define CONFIG_GATEWAYIP		10.81.67.254
-/*
-#	define CONFIG_IPADDR		192.162.1.2
+
+#	define CONFIG_IPADDR		192.168.10.222
 #	define CONFIG_NETMASK		255.255.255.0
-#	define CONFIG_SERVERIP		192.162.1.1
-#	define CONFIG_GATEWAYIP		192.162.1.1
-*/
+#	define CONFIG_SERVERIP		192.168.10.1
+#	define CONFIG_GATEWAYIP		192.168.10.1
+
 #	define CONFIG_OVERWRITE_ETHADDR_ONCE
 
 /* If CONFIG_SYS_DISCOVER_PHY is not defined - hardcoded */
@@ -166,9 +182,10 @@
 #endif
 
 #define CONFIG_BOOTDELAY		3
-#define CONFIG_ETHPRIME			"FEC0"
 #define CONFIG_LOADADDR			0x80010000	/* loadaddr env var */
 #define CONFIG_ARP_TIMEOUT		200UL
+
+
 
 /* Miscellaneous configurable options */
 #define CONFIG_SYS_LONGHELP		/* undef to save memory */
@@ -228,7 +245,7 @@
 #define CONFIG_SYS_CLKCTL_CCGR5		0xFFFFFFFF
 #define CONFIG_SYS_CLKCTL_CCGR6		0xFFFFFFFF
 #define CONFIG_SYS_CLKCTL_CCGR7		0xFFFFFFFF
-#define CONFIG_SYS_CLKCTL_CCGR8		0xFFFFFFFF
+#define CONFIG_SYS_CLKCTL_CCGR8		0x3FFFFFFF
 #define CONFIG_SYS_CLKCTL_CCGR9		0xFFFFFFFF
 #define CONFIG_SYS_CLKCTL_CCGR10	0xFFFFFFFF
 #define CONFIG_SYS_CLKCTL_CCGR11	0xFFFFFFFF
@@ -270,9 +287,44 @@
 /* FLASH and environment organization */
 #define CONFIG_SYS_NO_FLASH
 
-#define CONFIG_ENV_OFFSET		(6 * 64 * 1024)
-#define CONFIG_ENV_SIZE			(8 * 1024)
-#define CONFIG_ENV_IS_IN_MMC
-#define CONFIG_SYS_MMC_ENV_DEV		0
+#ifdef CONFIG_ELNICO_BOOT_FROM_NAND
+#	define CONFIG_ENV_OFFSET	(12 * 64 * 1024)
+#	define CONFIG_ENV_SIZE		(8 * 1024)
+#	define CONFIG_ENV_IS_IN_NAND
+#else // !CONFIG_ELNICO_BOOT_FROM_NAND //
+#	define CONFIG_ENV_OFFSET	(6 * 64 * 1024)
+#	define CONFIG_ENV_SIZE		(8 * 1024)
+#	define CONFIG_ENV_IS_IN_MMC
+#	define CONFIG_SYS_MMC_ENV_DEV	0
+#endif // !CONFIG_ELNICO_BOOT_FROM_NAND //
+
+/* Environment configuration */
+
+#define CONFIG_EXTRA_BOOTCMD_MMC		"bootcmd_mmc=fatload mmc 0:1 ${loadaddr} ${kernel}\;bootm ${loadaddr}"
+#define CONFIG_EXTRA_BOOTCMD_MMC_DEBUG_A5	"bootcmd_mmc_debug_a5=run bootargs_base bootargs_mmc bootargs_debug_a5 bootcmd_mmc"
+#define CONFIG_EXTRA_BOOTCMD_MMC_DEBUG_M4	"bootcmd_mmc_debug_m4=run bootargs_base bootargs_mmc bootargs_debug_m4 bootcmd_mmc"
+#define CONFIG_EXTRA_BOOTCMD_MMC_RELEASE	"bootcmd_mmc_release=run bootargs_base bootargs_mmc bootargs_release bootcmd_mmc"
+
+#define CONFIG_EXTRA_BOOTARGS_BASE		"bootargs_base=setenv bootargs mem=256M"
+#define CONFIG_EXTRA_BOOTARGS_MMC		"bootargs_mmc=setenv bootargs ${bootargs} root=/dev/mmcblk0p2 rw rootwait"
+#define CONFIG_EXTRA_BOOTARGS_DEBUG_A5		"bootargs_debug_a5=setenv bootargs ${bootargs} console=ttymxc1,115200"
+#define CONFIG_EXTRA_BOOTARGS_DEBUG_M4		"bootargs_debug_m4=setenv bootargs ${bootargs} console=ttymxc0,115200 quiet"
+#define CONFIG_EXTRA_BOOTARGS_RELEASE		"bootargs_release=setenv bootargs ${bootargs} console=ttymxc0,115200 quiet"
+
+#define CONFIG_EXTRA_ENV_SETTINGS						\
+	"kernel=uImage\0"							\
+	CONFIG_EXTRA_BOOTARGS_BASE "\0"						\
+	CONFIG_EXTRA_BOOTARGS_MMC "\0"						\
+	CONFIG_EXTRA_BOOTARGS_DEBUG_A5 "\0"					\
+	CONFIG_EXTRA_BOOTARGS_DEBUG_M4 "\0"					\
+	CONFIG_EXTRA_BOOTARGS_RELEASE "\0"					\
+	CONFIG_EXTRA_BOOTCMD_MMC "\0"						\
+	CONFIG_EXTRA_BOOTCMD_MMC_DEBUG_A5 "\0"					\
+	CONFIG_EXTRA_BOOTCMD_MMC_DEBUG_M4 "\0"					\
+	CONFIG_EXTRA_BOOTCMD_MMC_RELEASE "\0"					\
+	""
+
+#define CONFIG_BOOTCOMMAND							\
+	"run bootcmd_mmc_debug_a5"
 
 #endif

@@ -568,7 +568,7 @@ int board_late_init(void)
 
 int checkboard(void)
 {
-	puts("Board: Vybrid\n");
+	puts("Board: SQM4-VF6-EasyBoard\n");
 
 	return 0;
 }
