@@ -500,14 +500,6 @@ int board_mmc_init(bd_t *bis)
 #ifdef CONFIG_NAND_FSL_NFC
 void setup_iomux_nfc(void)
 {
-	__raw_writel(0x002038df, IOMUXC_PAD_063);
-	__raw_writel(0x002038df, IOMUXC_PAD_064);
-	__raw_writel(0x002038df, IOMUXC_PAD_065);
-	__raw_writel(0x002038df, IOMUXC_PAD_066);
-	__raw_writel(0x002038df, IOMUXC_PAD_067);
-	__raw_writel(0x002038df, IOMUXC_PAD_068);
-	__raw_writel(0x002038df, IOMUXC_PAD_069);
-	__raw_writel(0x002038df, IOMUXC_PAD_070);
 	__raw_writel(0x002038df, IOMUXC_PAD_071);
 	__raw_writel(0x002038df, IOMUXC_PAD_072);
 	__raw_writel(0x002038df, IOMUXC_PAD_073);
