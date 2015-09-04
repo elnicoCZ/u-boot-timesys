@@ -283,22 +283,7 @@ unsigned long ddr_ctrl_init(void)
 	__raw_writel(0x04070303, DDR_CR139);
 
 	__raw_writel(0x00000000, DDR_CR136);
-#if 0
-	__raw_writel(0x80000301, DDR_CR138);
-	__raw_writel(0x0000000A, DDR_CR140);
-	__raw_writel(0x00000000, DDR_CR141);
-	__raw_writel(0x0010ffff, DDR_CR143);
-	__raw_writel(0x16070303, DDR_CR144);
-	__raw_writel(0x0000000f, DDR_CR145);
-	__raw_writel(0x00000000, DDR_CR146);
-	__raw_writel(0x00000000, DDR_CR147);
-	__raw_writel(0x00000000, DDR_CR148);
-	__raw_writel(0x00000000, DDR_CR149);
-	__raw_writel(0x00000000, DDR_CR150);
-	__raw_writel(0x00000204, DDR_CR151);
-	__raw_writel(0x00000000, DDR_CR152);
-	__raw_writel(0x00000000, DDR_CR153);
-#endif
+
 	__raw_writel(0x682C0000, DDR_CR154);
 	__raw_writel(0x0000002d, DDR_CR155);	/* pad_ibe, _sel */
 	__raw_writel(0x00000006, DDR_CR158);	/* twr */
@@ -352,9 +337,12 @@ int fecpin_setclear(struct eth_device *dev, int setclear)
 {
 	struct fec_info_s *info = (struct fec_info_s *)dev->priv;
 
+#if defined(CONFIG_SYS_FEC0_IOBASE) || defined(CONFIG_SYS_FEC1_IOBASE)
 	__raw_writel(0x00203191, IOMUXC_PAD_000);	/* RMII_CLK */
+#endif // CONFIG_SYS_FEC0_IOBASE || CONFIG_SYS_FEC1_IOBASE //
 
 	if (setclear) {
+#if defined (CONFIG_SYS_FEC0_IOBASE)
 		if (info->iobase == CONFIG_SYS_FEC0_IOBASE) {
 			__raw_writel(0x00103192, IOMUXC_PAD_045);	/*MDC*/
 			__raw_writel(0x00103193, IOMUXC_PAD_046);	/*MDIO*/
@@ -366,6 +354,8 @@ int fecpin_setclear(struct eth_device *dev, int setclear)
 			__raw_writel(0x00103192, IOMUXC_PAD_052);	/*TxD0*/
 			__raw_writel(0x00103192, IOMUXC_PAD_053);	/*TxEn*/
 		}
+#endif // CONFIG_SYS_FEC0_IOBASE //
+#if defined (CONFIG_SYS_FEC1_IOBASE)
 		if (info->iobase == CONFIG_SYS_FEC1_IOBASE) {
 			__raw_writel(0x00103192, IOMUXC_PAD_054);	/*MDC*/
 			__raw_writel(0x00103193, IOMUXC_PAD_055);	/*MDIO*/
@@ -377,7 +367,9 @@ int fecpin_setclear(struct eth_device *dev, int setclear)
 			__raw_writel(0x00103192, IOMUXC_PAD_061);	/*TxD0*/
 			__raw_writel(0x00103192, IOMUXC_PAD_062);	/*TxEn*/
 		}
+#endif // CONFIG_SYS_FEC1_IOBASE //
 	} else {
+#if defined (CONFIG_SYS_FEC0_IOBASE)
 		if (info->iobase == CONFIG_SYS_FEC0_IOBASE) {
 			__raw_writel(0x00003192, IOMUXC_PAD_045);	/*MDC*/
 			__raw_writel(0x00003193, IOMUXC_PAD_046);	/*MDIO*/
@@ -389,6 +381,8 @@ int fecpin_setclear(struct eth_device *dev, int setclear)
 			__raw_writel(0x00003192, IOMUXC_PAD_052);	/*TxD0*/
 			__raw_writel(0x00003192, IOMUXC_PAD_053);	/*TxEn*/
 		}
+#endif // CONFIG_SYS_FEC0_IOBASE //
+#if defined (CONFIG_SYS_FEC1_IOBASE)
 		if (info->iobase == CONFIG_SYS_FEC1_IOBASE) {
 			__raw_writel(0x00003192, IOMUXC_PAD_054);	/*MDC*/
 			__raw_writel(0x00003193, IOMUXC_PAD_055);	/*MDIO*/
@@ -400,6 +394,7 @@ int fecpin_setclear(struct eth_device *dev, int setclear)
 			__raw_writel(0x00003192, IOMUXC_PAD_061);	/*TxD0*/
 			__raw_writel(0x00003192, IOMUXC_PAD_062);	/*TxEn*/
 		}
+#endif // CONFIG_SYS_FEC1_IOBASE //
 	}
 
 	return 0;
@@ -415,19 +410,6 @@ void setup_iomux_spi(void)
 #ifdef CONFIG_QUAD_SPI
 void setup_iomux_quadspi(void)
 {
-	__raw_writel(0x001030C3, IOMUXC_PAD_079);	/* SCK */
-	__raw_writel(0x001030FF, IOMUXC_PAD_080);	/* CS0 */
-	__raw_writel(0x001030C3, IOMUXC_PAD_081);	/* D3 */
-	__raw_writel(0x001030C3, IOMUXC_PAD_082);	/* D2 */
-	__raw_writel(0x001030C3, IOMUXC_PAD_083);	/* D1 */
-	__raw_writel(0x001030C3, IOMUXC_PAD_084);	/* D0 */
-
-	__raw_writel(0x001030C3, IOMUXC_PAD_086);	/* SCK */
-	__raw_writel(0x001030FF, IOMUXC_PAD_087);	/* CS0 */
-	__raw_writel(0x001030C3, IOMUXC_PAD_088);	/* D3 */
-	__raw_writel(0x001030C3, IOMUXC_PAD_089);	/* D2 */
-	__raw_writel(0x001030C3, IOMUXC_PAD_090);	/* D1 */
-	__raw_writel(0x001030C3, IOMUXC_PAD_091);	/* D0 */
 }
 #endif
 
@@ -436,14 +418,7 @@ int board_mmc_getcd(struct mmc *mmc)
 {
 	/*struct fsl_esdhc_cfg *cfg = (struct fsl_esdhc_cfg *)mmc->priv;*/
 	int ret;
-#if 0
-	__raw_writel(0x005031e2, IOMUXC_PAD_045);	/* clk */
-	__raw_writel(0x005031e2, IOMUXC_PAD_046);	/* cmd */
-	__raw_writel(0x005031e3, IOMUXC_PAD_047);	/* dat0 */
-	__raw_writel(0x005031e3, IOMUXC_PAD_048);	/* dat1 */
-	__raw_writel(0x005031e3, IOMUXC_PAD_049);	/* dat2 */
-	__raw_writel(0x005031e3, IOMUXC_PAD_050);	/* dat3 */
-#endif
+
 	__raw_writel(0x005031ef, IOMUXC_PAD_014);	/* clk */
 	__raw_writel(0x005031ef, IOMUXC_PAD_015);	/* cmd */
 	__raw_writel(0x005031ef, IOMUXC_PAD_016);	/* dat0 */
@@ -459,39 +434,7 @@ int board_mmc_init(bd_t *bis)
 {
 	u32 index;
 	s32 status = 0;
-#if 0
-	printf("%s: ", __func__);
-	for (index = 0; index < CONFIG_SYS_FSL_ESDHC_NUM;
-			index++) {
-		switch (index) {
-		case 0:
-			printf("sd %d\n", index);
-			__raw_writel(0x005031e2, IOMUXC_PAD_045); /* clk */
-			__raw_writel(0x005031e2, IOMUXC_PAD_046); /* cmd */
-			__raw_writel(0x005031e3, IOMUXC_PAD_047); /* dat0 */
-			__raw_writel(0x005031e3, IOMUXC_PAD_048); /* dat1 */
-			__raw_writel(0x005031e3, IOMUXC_PAD_049); /* dat2 */
-			__raw_writel(0x005031e3, IOMUXC_PAD_050); /* dat3 */
-			__raw_writel(0x005031e2, IOMUXC_PAD_051); /* wp */
-			break;
-		case 1:
-			printf("sd %d\n", index);
-			__raw_writel(0x005031a2, IOMUXC_PAD_014); /* clk */
-			__raw_writel(0x005031a2, IOMUXC_PAD_015); /* cmd */
-			__raw_writel(0x005031a3, IOMUXC_PAD_016); /* dat0 */
-			__raw_writel(0x005031a3, IOMUXC_PAD_017); /* dat1 */
-			__raw_writel(0x005031a3, IOMUXC_PAD_018); /* dat2 */
-			__raw_writel(0x005031a3, IOMUXC_PAD_019); /* dat3 */
-			__raw_writel(0x005031a2, IOMUXC_PAD_068); /* wp */
-			break;
-		default:
-			printf("Warning: you configured more ESDHC controller"
-				"(%d) as supported by the board(2)\n",
-				CONFIG_SYS_FSL_ESDHC_NUM);
-			return status;
-		}
-	}
-#endif
+
 	status |= fsl_esdhc_initialize(bis, &esdhc_cfg[index]);
 	return status;
 }
