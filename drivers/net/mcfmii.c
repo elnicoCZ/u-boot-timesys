@@ -256,6 +256,7 @@ void __mii_init(void)
 
 	info->phy_addr = mii_discover_phy(dev);
 
+#ifdef CONFIG_QUARTZ
 	/* Dual PHY Setup on Quartz
 	   FEC1 - 25MHz crystal
 	   FEC0 - 50MHz input from FEC1
@@ -271,6 +272,7 @@ void __mii_init(void)
 		mcffec_miiphy_write(dev->name, info->phy_addr, 0x00, 0x1200 );
 		mcffec_miiphy_write(dev->name, info->phy_addr, 0x1f, 0x8110 );
 	}
+#endif // CONFIG_QUARTZ //
 
 	while (i < MCFFEC_TOUT_LOOP) {
 		status = 0;
