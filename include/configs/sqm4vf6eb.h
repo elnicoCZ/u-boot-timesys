@@ -174,6 +174,8 @@
 
 #	define CONFIG_OVERWRITE_ETHADDR_ONCE
 
+#	define CONFIG_NETCONSOLE	1
+
 /* If CONFIG_SYS_DISCOVER_PHY is not defined - hardcoded */
 #	ifndef CONFIG_SYS_DISCOVER_PHY
 #		define FECDUPLEX	FULL

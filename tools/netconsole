@@ -35,9 +35,9 @@ for nc in netcat nc ; do
 done
 
 trap "stty icanon echo intr ^C" 0 2 3 5 10 13 15
-echo "NOTE: the interrupt signal (normally ^C) has been remapped to ^T"
+echo "NOTE: the interrupt signal (normally ^C) has been remapped to ^R"
 
-stty -icanon -echo intr ^T
+stty -icanon -echo intr ^R
 (
 if type ncb 2>/dev/null ; then
 	# see if ncb is in $PATH
