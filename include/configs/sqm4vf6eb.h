@@ -305,6 +305,7 @@
 #endif // !CONFIG_ELNICO_BOOT_FROM_NAND //
 
 /* Environment configuration */
+#ifndef CONFIG_ELNICO_SUPPRESS_ENVIRONMENT
 
 #define CONFIG_EXTRA_BOOTCMD_MMC		"bootcmd_mmc=fatload mmc 0:1 ${loadaddr} ${kernel}\;bootm ${loadaddr}"
 #define CONFIG_EXTRA_BOOTCMD_MMC_DEBUG_A5	"bootcmd_mmc_debug_a5=run bootargs_base bootargs_mmc bootargs_debug_a5 bootcmd_mmc"
@@ -332,5 +333,7 @@
 
 #define CONFIG_BOOTCOMMAND							\
 	"run bootcmd_mmc_debug_a5"
+
+#endif // !CONFIG_ELNICO_SUPPRESS_ENVIRONMENT //
 
 #endif
