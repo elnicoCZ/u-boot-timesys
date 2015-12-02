@@ -114,6 +114,11 @@
  */
 #ifdef CONFIG_CMD_NAND
 #define CONFIG_MTD_NAND_FSL_8_BIT	1
+#define CONFIG_CMD_MTDPARTS
+#define MTDIDS_DEFAULT			"nand0=NAND"
+#define MTDPARTS_DEFAULT		"mtdparts=NAND:1m(mtd_uboot)ro,5m(mtd_kernel)ro,-(mtd_rootfs)"
+#define CONFIG_MTD_DEVICE
+#define CONFIG_MTD_PARTITIONS
 #define CONFIG_JFFS2_NAND
 #define CONFIG_NAND_FSL_NFC
 #define CONFIG_SYS_NAND_BASE		0x400E0000
@@ -314,23 +319,54 @@
 #define CONFIG_EXTRA_BOOTCMD_MMC_DEBUG_M4	"bootcmd_mmc_debug_m4=run bootargs_base bootargs_mmc bootargs_debug_m4 bootcmd_mmc"
 #define CONFIG_EXTRA_BOOTCMD_MMC_RELEASE	"bootcmd_mmc_release=run bootargs_base bootargs_mmc bootargs_release bootcmd_mmc"
 
+#define CONFIG_EXTRA_BOOTCMD_NAND		"bootcmd_nand=nand read ${loadaddr} mtd_kernel ${kernelsize}\;bootm ${loadaddr}"
+#define CONFIG_EXTRA_BOOTCMD_NAND_DEBUG_A5	"bootcmd_nand_debug_a5=run bootargs_base bootargs_nand bootargs_debug_a5 bootcmd_nand"
+#define CONFIG_EXTRA_BOOTCMD_NAND_DEBUG_M4	"bootcmd_nand_debug_m4=run bootargs_base bootargs_nand bootargs_debug_m4 bootcmd_nand"
+#define CONFIG_EXTRA_BOOTCMD_NAND_RELEASE	"bootcmd_nand_release=run bootargs_base bootargs_nand bootargs_release bootcmd_nand"
+#define CONFIG_EXTRA_MTDPARTS			"mtdparts=" MTDPARTS_DEFAULT
+
 #define CONFIG_EXTRA_BOOTARGS_BASE		"bootargs_base=setenv bootargs mem=256M"
-#define CONFIG_EXTRA_BOOTARGS_MMC		"bootargs_mmc=setenv bootargs ${bootargs} root=/dev/mmcblk0p2 rw rootwait"
-#define CONFIG_EXTRA_BOOTARGS_DEBUG_A5		"bootargs_debug_a5=setenv bootargs ${bootargs} console=ttymxc1,115200"
-#define CONFIG_EXTRA_BOOTARGS_DEBUG_M4		"bootargs_debug_m4=setenv bootargs ${bootargs} console=ttymxc0,115200 quiet"
-#define CONFIG_EXTRA_BOOTARGS_RELEASE		"bootargs_release=setenv bootargs ${bootargs} console=ttymxc0,115200 quiet"
+#define CONFIG_EXTRA_BOOTARGS_MMC		"bootargs_mmc=setenv bootargs ${bootargs} root=/dev/mmcblk0p2 ${rootfs_rights} rootwait"
+#define CONFIG_EXTRA_BOOTARGS_NAND		"bootargs_nand=setenv bootargs ${bootargs} ${mtdparts} ubi.mtd=mtd_rootfs root=ubi0_0 rootfstype=ubifs ${rootfs_rights} rootwait"
+#define CONFIG_EXTRA_BOOTARGS_DEBUG_A5		"bootargs_debug_a5=setenv bootargs ${bootargs} console=ttymxc1,115200 2"
+#define CONFIG_EXTRA_BOOTARGS_DEBUG_M4		"bootargs_debug_m4=setenv bootargs ${bootargs} console=ttymxc0,115200 quiet 3"
+#define CONFIG_EXTRA_BOOTARGS_RELEASE		"bootargs_release=setenv bootargs ${bootargs} console=ttymxc0,115200 quiet 5"
+#define CONFIG_EXTRA_ROOTFS_RIGHTS		"rootfs_rights=rw"
+
+#define CONFIG_EXTRA_ENV_SETTINGS_GENERAL					\
+	"kernel=uImage"							"\0"	\
+	CONFIG_EXTRA_BOOTARGS_BASE					"\0"	\
+	CONFIG_EXTRA_BOOTARGS_DEBUG_A5					"\0"	\
+	CONFIG_EXTRA_BOOTARGS_DEBUG_M4					"\0"	\
+	CONFIG_EXTRA_BOOTARGS_RELEASE					"\0"	\
+	CONFIG_EXTRA_ROOTFS_RIGHTS					"\0"	\
+	""
+
+#define CONFIG_EXTRA_ENV_SETTINGS_MMC						\
+	CONFIG_EXTRA_BOOTARGS_MMC					"\0"	\
+	CONFIG_EXTRA_BOOTCMD_MMC					"\0"	\
+	CONFIG_EXTRA_BOOTCMD_MMC_DEBUG_A5				"\0"	\
+	CONFIG_EXTRA_BOOTCMD_MMC_DEBUG_M4				"\0"	\
+	CONFIG_EXTRA_BOOTCMD_MMC_RELEASE				"\0"	\
+	""
+
+#ifdef CONFIG_CMD_NAND
+# define CONFIG_EXTRA_ENV_SETTINGS_NAND						\
+	CONFIG_EXTRA_BOOTARGS_NAND					"\0"	\
+	CONFIG_EXTRA_BOOTCMD_NAND					"\0"	\
+	CONFIG_EXTRA_BOOTCMD_NAND_DEBUG_A5				"\0"	\
+	CONFIG_EXTRA_BOOTCMD_NAND_DEBUG_M4				"\0"	\
+	CONFIG_EXTRA_BOOTCMD_NAND_RELEASE				"\0"	\
+	CONFIG_EXTRA_MTDPARTS						"\0"	\
+	""
+#else // !CONFIG_CMD_NAND //
+# define CONFIG_EXTRA_ENV_SETTINGS_NAND		""
+#endif // !CONFIG_CMD_NAND //
 
 #define CONFIG_EXTRA_ENV_SETTINGS						\
-	"kernel=uImage\0"							\
-	CONFIG_EXTRA_BOOTARGS_BASE "\0"						\
-	CONFIG_EXTRA_BOOTARGS_MMC "\0"						\
-	CONFIG_EXTRA_BOOTARGS_DEBUG_A5 "\0"					\
-	CONFIG_EXTRA_BOOTARGS_DEBUG_M4 "\0"					\
-	CONFIG_EXTRA_BOOTARGS_RELEASE "\0"					\
-	CONFIG_EXTRA_BOOTCMD_MMC "\0"						\
-	CONFIG_EXTRA_BOOTCMD_MMC_DEBUG_A5 "\0"					\
-	CONFIG_EXTRA_BOOTCMD_MMC_DEBUG_M4 "\0"					\
-	CONFIG_EXTRA_BOOTCMD_MMC_RELEASE "\0"					\
+	CONFIG_EXTRA_ENV_SETTINGS_GENERAL					\
+	CONFIG_EXTRA_ENV_SETTINGS_MMC						\
+	CONFIG_EXTRA_ENV_SETTINGS_NAND						\
 	""
 
 #define CONFIG_BOOTCOMMAND							\
