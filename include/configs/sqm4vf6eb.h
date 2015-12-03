@@ -314,7 +314,7 @@
 /* Environment configuration */
 #ifndef CONFIG_ELNICO_SUPPRESS_ENVIRONMENT
 
-#define CONFIG_EXTRA_BOOTCMD_MMC		"bootcmd_mmc=fatload mmc 0:1 ${loadaddr} ${kernel}\;bootm ${loadaddr}"
+#define CONFIG_EXTRA_BOOTCMD_MMC		"bootcmd_mmc=mmc rescan\;fatload mmc 0:1 ${loadaddr} ${kernel}\;bootm ${loadaddr}"
 #define CONFIG_EXTRA_BOOTCMD_MMC_DEBUG_A5	"bootcmd_mmc_debug_a5=run bootargs_base bootargs_mmc bootargs_debug_a5 bootcmd_mmc"
 #define CONFIG_EXTRA_BOOTCMD_MMC_DEBUG_M4	"bootcmd_mmc_debug_m4=run bootargs_base bootargs_mmc bootargs_debug_m4 bootcmd_mmc"
 #define CONFIG_EXTRA_BOOTCMD_MMC_RELEASE	"bootcmd_mmc_release=run bootargs_base bootargs_mmc bootargs_release bootcmd_mmc"
