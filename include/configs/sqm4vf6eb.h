@@ -324,6 +324,7 @@
 #define CONFIG_EXTRA_BOOTCMD_NAND_DEBUG_M4	"bootcmd_nand_debug_m4=run bootargs_base bootargs_nand bootargs_debug_m4 bootcmd_nand"
 #define CONFIG_EXTRA_BOOTCMD_NAND_RELEASE	"bootcmd_nand_release=run bootargs_base bootargs_nand bootargs_release bootcmd_nand"
 #define CONFIG_EXTRA_MTDPARTS			"mtdparts=" MTDPARTS_DEFAULT
+#define CONFIG_EXTRA_MTDIDS			"mtdids=" MTDIDS_DEFAULT
 
 #define CONFIG_EXTRA_BOOTARGS_BASE		"bootargs_base=setenv bootargs mem=256M"
 #define CONFIG_EXTRA_BOOTARGS_MMC		"bootargs_mmc=setenv bootargs ${bootargs} root=/dev/mmcblk0p2 ${rootfs_rights} rootwait"
@@ -358,6 +359,7 @@
 	CONFIG_EXTRA_BOOTCMD_NAND_DEBUG_M4				"\0"	\
 	CONFIG_EXTRA_BOOTCMD_NAND_RELEASE				"\0"	\
 	CONFIG_EXTRA_MTDPARTS						"\0"	\
+	CONFIG_EXTRA_MTDIDS						"\0"	\
 	""
 #else // !CONFIG_CMD_NAND //
 # define CONFIG_EXTRA_ENV_SETTINGS_NAND		""
